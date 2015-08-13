@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Grayscale - Start Bootstrap Theme</title>
+    <title>RockAway - Rockammender 5000!</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -76,7 +76,7 @@
                     <div class="col-md-8 col-md-offset-2">
 
                         <h1 class="brand-heading">Rock Away</h1>
-                        <p class="intro-text">A vacations spot recommender for the destination climber.</p>
+                        <p class="intro-text">A vacation spot recommender for the destination climber.</p>
                         <p> Destinations recommended by <a class="page-scroll" href="#about">User</a> profile, your favorite <a class="page-scroll" href="#download">Climb</a>, or <a class="page-scroll" href="#contact">Features</a> you're looking for. </p> 
                         <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
@@ -93,7 +93,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>Rockamender 5000!</h2>
-                <p>The Rockamender 5000! is the recommendation system under the hood based on data collected from <a href="http://mountainproject.com">Mountain Project</a>. </p>
+                <p>The Rockamender 5000! is the recommendation system under the hood based on data collected from <a target="_blank" href="http://mountainproject.com">Mountain Project</a>. </p>
 
                 <p>Enter Mountain Project user name or ID to get some bitchin' recommendations for your next climbing destination.</p>
                 <p>
@@ -123,11 +123,22 @@
             <div class="container">
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>Rockammend by Climb</h2>
-                    <p>Find areas similar to your favorite climb! Just enter the URL or Climb ID from Mountain Project.</p>
+                    <p>Find areas similar to your favorite climb or climbs! Just enter the URL or Climb ID from <a target="_blank" href="http://mountainproject.com">Mountain Project</a>.  Seperate multiple by commas. </p>
                     <p>
                     <form action="{{ url_for('climb_search') }}" method=post class=climb-search>
                         <input placeholder="Climb URL or ID" class="textubuntu" name=climb type="text">
                         <button class="buttonubuntu">Data!</button>
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    {% if climb_error %}
+                        <p>
+                        <a href="#download" class="page-scroll btn btn-default btn-lg">{{ climb_error }}</a>
+                        </p>
+                    {% endif %}
                     </form>
                     </p>
                 </div>

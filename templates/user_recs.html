@@ -40,7 +40,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">
+                <a class="navbar-brand page-scroll" href="/">
                     <i class="fa fa-play-circle"></i>  <span class="light">Rock</span>Away
                 </a>
             </div>
@@ -77,14 +77,14 @@
                         <h2>Places You Should Checkout</h2>
                         {% for entry in entries['locations'] %}
                             <p>
-                            <a href="mountainproject.com" class="btn btn-default btn-lg">{{ entry }}</a>
+                            <a href="http://mountainproject.com" target="_blank" class="btn btn-default btn-lg">{{ entry }}</a>
                             </p>
                         {% else %}
                             <div><em>Unbelievable.  No entries here so far</em></div>
                         {% endfor %}
-                        <p> Your star ratings have been used along with those of others to produce a ranked <a href="https://en.wikipedia.org/wiki/Matrix_decomposition">matrix factorization</a> recommender model.  Data! 
+                        <p> Your information has been used along with the star ratings of others to produce a ranked <a href="https://en.wikipedia.org/wiki/Matrix_decomposition">matrix factorization</a> recommender model.  Data! 
                         </p>
-                        <p>See the recommended climbs for you in each of these areas.<br>
+                        <p>See the recommended climbs tailored for you in each of these areas.<br>
                         <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
                         </a>
@@ -132,9 +132,9 @@
                             <h5>You tend to favor solid technical climbing over adventure trad.</h5>
                         {% endif %}
                         {% if user_lfs[1]>0 %}
-                            <h5>You have a penchant for climbing locations around Colorado.</h5>
+                            <h5>You have a penchant for climbs in the Mountain West (think Mountain Time Zone).</h5>
                         {% else %}
-                            <h5>You prefer climbs outside of Colorado.</h5>
+                            <h5>You prefer climbs outside of the Mountain West (think Mountain Time Zone).</h5>
                         {% endif %}
                         {% if user_lfs[0]<0 %}
                             <h5>You prefer cool climbing moves over cool looking lines.</h5>

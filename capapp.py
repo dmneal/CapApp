@@ -28,16 +28,9 @@ app = Flask(__name__)
 app.secret_key = 'some_secret'
 app.config.from_object(__name__)
 
-# @app.before_request
-# def before_request():
-#     pass
-#     #g.climbs = [1, 2, 'frog']
 
 @app.route('/', methods = ['GET'])
 def show_entries():
-    #g.test = ['test','test','test']
-    climb_recs = ['Nothing to recommend yet']
-    print climb_recs
     return render_template('index.html')
 
 @app.route('/user_search', methods=['POST'])
@@ -58,9 +51,8 @@ def user_search():
                 entries[loc] += [climb_map[climb_id]]
 
         user_lfs = rf.get_latent_user(user_id, rfr_mod_lf).tolist()
-        print type(user_lfs)
 
-        return render_template('recs.html', entries=entries,
+        return render_template('user_recs.html', entries=entries,
                            user_lfs=user_lfs)
     return render_template('index.html', scroll='about', 
                            user_error = 'User not found. :[')
@@ -68,16 +60,36 @@ def user_search():
 
 @app.route('/climb_search', methods=['POST'])
 def climb_search():
-    print request.form['climb']
-    try:
-        climb_id = int(request.form['climb'].split('/')[-1])
-        if climb_id not in df_data.Climbs.values:
-            climb_id = None
-    except:
-        climb_id = None
-    print '--------------------------------------------------------'
-    print climb_id
+    climbs = request.form['climb'].split(',')
+    climb_ids = []
     
+    try:
+        for climb in climbs:
+            climb_id_cur = int(climb.strip().split('/')[-1])
+            if climb_id_cur in df_data.Climb.values:
+                climb_ids += [climb_id_cur]
+    except:
+        climb_ids = None
+    
+    
+    if climb_ids:        
+        loc_recs, loc_climb_recs = rf.rec_loc_climb_sim(rfr_mod, 
+                                            df_raw, 
+                                            climb_ids=climb_ids)
+        entries = {'locations':loc_recs}
+        for loc in loc_recs:
+                entries[loc+'_id'] = loc_climb_recs[loc]
+                entries[loc] = []
+                for climb_id in loc_climb_recs[loc]:
+                    entries[loc] += [climb_map[climb_id]]
+
+        user_lfs = rf.get_latent_climbs(climb_ids, rfr_mod_lf).tolist()
+
+        return render_template('user_recs.html', entries=entries,
+                           user_lfs=user_lfs)
+
+    return render_template('index.html', scroll='download', 
+                           climb_error = 'Climb not found. :[')
 
 
 
