@@ -77,7 +77,7 @@
                         <h2>Places You Should Checkout</h2>
                         {% for entry in entries['locations'] %}
                             <p>
-                            <a href="http://mountainproject.com" target="_blank" class="btn btn-default btn-lg">{{ entry }}</a>
+                            <a href="#about" class="page-scroll btn btn-default btn-lg">{{ entry }}</a>
                             </p>
                         {% else %}
                             <div><em>Unbelievable.  No entries here so far</em></div>
@@ -132,9 +132,9 @@
                             <h5>You tend to favor solid technical climbing over adventure trad.</h5>
                         {% endif %}
                         {% if user_lfs[1]>0 %}
-                            <h5>You have a penchant for climbs in the Mountain West (think Mountain Time Zone).</h5>
+                            <h5>You have a penchant for climbs like those found in the Rockies.</h5>
                         {% else %}
-                            <h5>You prefer climbs outside of the Mountain West (think Mountain Time Zone).</h5>
+                            <h5>You prefer climbs less like those found in the Rockies.</h5>
                         {% endif %}
                         {% if user_lfs[0]<0 %}
                             <h5>You prefer cool climbing moves over cool looking lines.</h5>
@@ -142,9 +142,9 @@
                             <h5>You prefer cool looking lines over cool climbing moves.</h5>
                         {% endif %}
                         {% if user_lfs[0]>0 %}
-                            <h5>You prefer that your lines be consistent.</h5>
+                            <h5>You prefer climbs out west.</h5>
                         {% else %}
-                            <h5>You prefer varied lines over consistency.</h5>
+                            <h5>You prefer climbs back east.</h5>
                         {% endif %}
                     {% else %}
                         <h5>The model says nothing about you.  You are as mysterious as the wind.</h5>
@@ -165,10 +165,7 @@
                 </p>
                 <ul class="list-inline banner-social-buttons">
                     <li>
-                        <a href="https://twitter.com/devinmneal" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/dmneal" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                        <a href="https://github.com/dmneal" target="_blank" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
                     </li>
                 </ul>
             </div>

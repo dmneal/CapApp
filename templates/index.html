@@ -40,7 +40,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="#map">
+                <a class="navbar-brand page-scroll" href="#devin">
                     <i class="fa fa-play-circle"></i>  <span class="light">By</span> Devin Neal
                 </a>
             </div>
@@ -92,8 +92,8 @@
     <section id="about" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Rockamender 5000!</h2>
-                <p>The Rockamender 5000! is the recommendation system under the hood based on data collected from <a target="_blank" href="http://mountainproject.com">Mountain Project</a>. </p>
+                <h2>Rockammender 5000!</h2>
+                <p>The Rockammender 5000! is the recommendation system under the hood based on data collected from <a target="_blank" href="http://mountainproject.com">Mountain Project</a>. </p>
 
                 <p>Enter Mountain Project user name or ID to get some bitchin' recommendations for your next climbing destination.</p>
                 <p>
@@ -150,27 +150,56 @@
     <section id="contact" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Contact Start Bootstrap</h2>
-                <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
-                </p>
-                <ul class="list-inline banner-social-buttons">
-                    <li>
-                        <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                    </li>
-                    <li>
-                        <a href="https://plus.google.com/+Startbootstrap/posts" class="btn btn-default btn-lg"><i class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a>
-                    </li>
-                </ul>
+                <h2>Rockammend by Climb Features</h2>
+                <p>Answer the following 6 questions in order with +1 or -1:</p>
+                <p align='left'>Do you prefer adventure trad (+1), or technical single pitch (-1)<br>Do you prefer climbing in the Rockies (+1) or not (-1)<br>Do you prefer that the moves are cool (+1), or that the route looks cool (-1)<br>Do you prefer to be out west (+1), or back east (-1)<br>Do you only climb Sport (+1) or is Trad okay (-1)<br>And what is your max climbing difficulty (YDS like "5.10a")</p>
+                <p>
+                <form action="{{ url_for('lf_search') }}" method=post class=lf-search>
+                    <input placeholder='Features (ex. "1, 1, -1, -1, 1, 5.10c")' class="textubuntu" name=lfs type="text">
+                    <button class="buttonubuntu">Data!</button>
+                </form>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                {% if lfs_error %}
+                    <p>
+                    <a href="#download" class="page-scroll btn btn-default btn-lg">{{ lfs_error }}</a>
+                    </p>
+                {% endif %}
             </div>
         </div>
     </section>
 
     <!-- Map Section -->
-    <div id="map"></div>
+    <section id="devin" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Contact Devin Neal PhD</h2>
+                <p>If you liked what you found, want to give me a job, or just want to say hi!</p>
+                <p><a href="mailto:felixtheskacat@hotmail.com">felixtheskacat@hotmail.com</a>
+                </p>
+                <ul class="list-inline banner-social-buttons">
+                    <li>
+                        <a href="https://github.com/dmneal" target="_blank" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                    </li>
+                </ul>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>                
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+    </section>
+
+    </div>
 
     <!-- Footer -->
     <footer>

@@ -114,6 +114,41 @@ def get_latent_climbs(climb_ids, model):
         climb_av += df_fac_climb.loc[climb_id]
     return climb_av
 
+def rec_loc_climb_lf(input_lf, climb_type, model, df_raw, df_data,
+                    rating_max=18, star_min=4, n_climbs=10, 
+                     n_areas=3, verbose=False):
+
+
+    scale_ls = 0.05 * input_lf
+    coefs = model.get('coefficients')
+    df_fac_climb = pd.DataFrame(np.array(coefs['Climb']['factors']))
+    df_rec = pd.DataFrame(scale_ls.dot(df_fac_climb.values.T))
+    df_rec.set_index(np.array(coefs['Climb']['Climb']), inplace=True)
+
+    df_rec.sort(0, ascending=False, inplace=True)
+
+    df_rec = df_rec[df_raw['stars']>star_min]
+    df_rec = df_rec[df_raw['type']==climb_type]
+
+    loc_climb_recs = defaultdict(list)
+    loc_recs = []
+    n_recs = 0
+    for climb in df_rec.index:
+        if df_raw.loc[climb].rating < rating_max:
+            loc = df_raw.loc[climb].sub_location
+            if loc not in (loc_recs):
+                loc_climb_recs[loc] += [climb]
+                if len(loc_climb_recs[loc]) == n_climbs:
+                    loc_recs += [loc]
+                    n_recs += 1
+                    if n_recs == n_areas:
+                        break
+    if verbose:
+        for loc in loc_recs:
+            print loc
+            print loc_climb_recs[loc]
+    return loc_recs, loc_climb_recs
+
 if __name__ == "__main__":
     #user name to user id dict
     with open('user_map.p','r') as f:
@@ -159,3 +194,14 @@ if __name__ == "__main__":
                         verbose=True) 
     
     print get_latent_climbs([106460891, 106460901, 105875465], rfr_mod_lf)
+
+    input_lf = np.array([-1,-1,1,-1])
+    climb_type = 'Trad'
+    star_min = 3
+    rating_max = 20
+    model = rfr_mod_lf
+    df_raw
+    df_data
+    loc_recs, loc_climb_recs=rec_loc_climb_lf(input_lf, climb_type, model, df_raw, df_data,
+                        rating_max=rating_max, star_min=star_min,
+                    verbose=True)
