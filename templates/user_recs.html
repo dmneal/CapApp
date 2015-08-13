@@ -41,7 +41,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
-                    <i class="fa fa-play-circle"></i>  <span class="light">Start</span> Bootstrap
+                    <i class="fa fa-play-circle"></i>  <span class="light">Rock</span>Away
                 </a>
             </div>
 
@@ -53,10 +53,10 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">About</a>
+                        <a class="page-scroll" href="#about">Climbs</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#download">Download</a>
+                        <a class="page-scroll" href="#download">User</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
@@ -69,16 +69,26 @@
     </nav>
 
     <!-- Intro Header -->
-    <header class="intro">
+    <header class="intro2">
         <div class="intro-body">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <h1 class="brand-heading">Grayscale</h1>
-                        <p class="intro-text">A free, responsive, one page Bootstrap theme.<br>Created by Start Bootstrap.</p>
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <h2>Places You Should Checkout</h2>
+                        {% for entry in entries['locations'] %}
+                            <p>
+                            <a href="mountainproject.com" class="btn btn-default btn-lg">{{ entry }}</a>
+                            </p>
+                        {% else %}
+                            <div><em>Unbelievable.  No entries here so far</em></div>
+                        {% endfor %}
+                        <p> Your star ratings have been used along with those of others to produce a ranked <a href="https://en.wikipedia.org/wiki/Matrix_decomposition">matrix factorization</a> recommender model.  Data! 
+                        </p>
+                        <p>See the recommended climbs for you in each of these areas.<br>
                         <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
                         </a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -89,23 +99,21 @@
     <section id="about" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Clever Web 2.0 Name for a Climbing Recommender</h2>
-                <p>This is a recommendation system based on data collected from <a href="http://mountainproject.com">Mountain Project</a>. Enter Mountain Project user name or ID to get some bitchin' recommendations for your next climbing destination.</p>
-                <div>
-                <form action="{{ url_for('show_entries') }}" method=post class=user-search>
-                    <input placeholder="User Name or ID" class="textubuntu" name=user_str type="text">
-                    <button class="buttonubuntu">Data!</button>
-                </form>
-                </div>
-                <div>
-                {% for entry in entries %}
-                    <li><h2>{{ entry }}</h2>{{ entry }}
+                 <h1>Climbs you should try</h1>
+                 {% for loc in entries['locations'] %}
+                    <p>
+                    <h3>{{ loc }}</h3>
+                    {% for climb in entries[loc] %}
+                        <div><a class = "btn" href = {{ "http://mountainproject.com/v/" + entries[loc+'_id'][loop.index-1]|string }} target="_blank">{{ climb }}</a>
+                        </div>
+                    {% else %}
+                        <li><em>Unbelievable.  Nothing to recommend here.</em></li>
+                    {% endfor %}
+                    </p>
                 {% else %}
                     <li><em>Unbelievable.  No entries here so far</em></li>
                 {% endfor %}
-                </div>
-                <p>This theme features stock photos by <a href="http://gratisography.com/">Gratisography</a> along with a custom Google Maps skin courtesy of <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
-                <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.</p>
+
             </div>
         </div>
     </section>
@@ -115,9 +123,33 @@
         <div class="download-section">
             <div class="container">
                 <div class="col-lg-8 col-lg-offset-2">
-                    <h2>Download Grayscale</h2>
-                    <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
-                    <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
+                    <h2>What your ratings say about you</h2>
+                    <!-- {{user_lfs}} -->
+                    {% if user_lfs %}
+                        {% if user_lfs[0]>0 %}
+                            <h5>You tend to favor adventure (Multi-pitch trad, alpine, etc.) over technical climbing.</h5>
+                        {% else %}
+                            <h5>You tend to favor solid technical climbing over adventure trad.</h5>
+                        {% endif %}
+                        {% if user_lfs[1]>0 %}
+                            <h5>You have a penchant for climbing locations around Colorado.</h5>
+                        {% else %}
+                            <h5>You prefer climbs outside of Colorado.</h5>
+                        {% endif %}
+                        {% if user_lfs[0]<0 %}
+                            <h5>You prefer cool climbing moves over cool looking lines.</h5>
+                        {% else %}
+                            <h5>You prefer cool looking lines over cool climbing moves.</h5>
+                        {% endif %}
+                        {% if user_lfs[0]>0 %}
+                            <h5>You prefer that your lines be consistent.</h5>
+                        {% else %}
+                            <h5>You prefer varied lines over consistency.</h5>
+                        {% endif %}
+                    {% else %}
+                        <h5>The model says nothing about you.  You are as mysterious as the wind.</h5>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -127,19 +159,16 @@
     <section id="contact" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Contact Start Bootstrap</h2>
-                <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
+                <h2>Contact Devin Neal PhD</h2>
+                <p>If you liked what you found, want to give me a job, or just want to say hi!</p>
+                <p><a href="mailto:felixtheskacat@hotmail.com">felixtheskacat@hotmail.com</a>
                 </p>
                 <ul class="list-inline banner-social-buttons">
                     <li>
-                        <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                        <a href="https://twitter.com/devinmneal" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
                     </li>
                     <li>
-                        <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                    </li>
-                    <li>
-                        <a href="https://plus.google.com/+Startbootstrap/posts" class="btn btn-default btn-lg"><i class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a>
+                        <a href="https://github.com/dmneal" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
                     </li>
                 </ul>
             </div>
@@ -147,12 +176,12 @@
     </section>
 
     <!-- Map Section -->
-    <div id="map"></div>
-
+<!--     <div id="map"></div>
+ -->
     <!-- Footer -->
     <footer>
         <div class="container text-center">
-            <p>Copyright &copy; Your Website 2014</p>
+            <p>Copyright &copy; Devin Neal 2015</p>
         </div>
     </footer>
 
