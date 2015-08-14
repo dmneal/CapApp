@@ -7,6 +7,21 @@ from collections import defaultdict
 
 
 def determine_input(input_str, df_data, user_map):
+    '''Determine the user id intiger from either a user name
+    or user id.
+    
+    Args:
+        input_str (string): A string that is either the user
+                            name or id in string form
+        df_data (pd dataframe): df of users' star ratings
+        user_map (dict): user name to id map
+
+    Returns:
+        user_id (int)
+        or None if not in system
+    '''
+
+
     try:
         id_val = int(input_str)
         if id_val in df_data.User.values:
@@ -20,7 +35,22 @@ def determine_input(input_str, df_data, user_map):
             return None
 
 def user_rated_visited(user_id, df_data, df_raw):
-    #Find destinations climber has rated climbs from
+    ''' Find areas user has visited and a comfortable
+    max difficulty for them based on climbs they have
+    rated.
+    
+    Args:
+        user_id (int): id of user
+        df_data (pd dataframe): dataframe with users' 
+                                star ratings.
+        df_raw (pd dataframe): dataframe with climb
+                               feature data
+    
+    Returns:
+        visited (set): areas user has visited
+        rating_max (float): hardest climb that should
+                            be recommended
+    '''
     climbs_rated = df_data[df_data.User==user_id].Climb
     visited = set(df_raw.loc[climbs_rated].sub_location.values)
   
@@ -35,7 +65,23 @@ def user_rated_visited(user_id, df_data, df_raw):
 #Find climb locations to recommend
 def rec_loc_climb(user_id, visited, rating_max, df_raw,
                   model, verbose=False, n_areas=3, n_climbs=10):
-    
+    '''Recomend new locations and climbs based on input model.
+
+    Args:
+        user_id (int): user id from mountainproject.com
+        visited (iterable): areas (str) user has visited
+        rating_max (float): hardes climb to recommend
+        df_raw (pd dataframe): climb feature data
+        model (Graphlab model): model to make recs from
+        verbose (bool): for printing recommendations
+        n_area (int): number of areas to recommend
+        n_climbs (int): number of climbs to rec in each areas
+
+    Returns:
+        loc_recs (list of str): areas to recommend
+        loc_climb_recs (dict): map of areas to list of climb_ids
+    '''
+
     climb_recs = model.recommend(users=[user_id], k=13000)
     loc_climb_recs = defaultdict(list)
     loc_recs = []
@@ -58,6 +104,14 @@ def rec_loc_climb(user_id, visited, rating_max, df_raw,
     return loc_recs, loc_climb_recs
     
 def get_latent_user(user_id, model):
+    '''Find user latent information from model
+    Args:
+        user_id (int): user id
+        model (Graphlab model): model to pull latent features from
+
+    Returns:
+        df_fac_user (iterable): latent feature scores
+    '''
     coefs = model.get('coefficients')
     df_fac_user = pd.DataFrame(np.array(coefs['User']['factors']))
     df_fac_user.set_index(np.array(coefs['User']['User']), inplace=True)
@@ -66,9 +120,27 @@ def get_latent_user(user_id, model):
 def rec_loc_climb_sim(model, df_raw, climb_ids=[106129861, 106460891], 
                       rating_max = None,
                       verbose=False, 
-                      n_areas=3, n_climbs=10):
+                      n_areas=3, n_climbs=10, star_min=3.5):
+    '''Recommend climbs and areas based on item similarity of input
+    climbs.
+    Args:
+        model (Graphlab model): model to use.
+        df_raw (pd dataframe): df of climb feature data
+        climb_ids (iterable of ints): climb ids to find similar
+        rating_max (float): highest difficulty for user, set to 
+                            difficulty of climb_ids if None.
+        verbose (bool): print results if True
+        n_area (int): number of areas to recommend
+        n_climbs (int): number of climbs to recommend for areas
+        star_min (float): min star score of climb to recommend
+
+    Returns:
+        loc_recs (list of str): areas to recommend
+        loc_climb_recs (dict): map of areas to list of climb_ids
+    '''
+
     #Recommend locations and climbs based on similarities to input climbs
-    rec_SF = model.get_similar_items(climb_ids, k=1000)
+    rec_SF = model.get_similar_items(climb_ids, k=13000)
     top_recs = rec_SF.to_dataframe().sort(['distance'],
                                           ascending=False).similar
     visited = set(df_raw.loc[climb_ids].sub_location.values)
@@ -88,15 +160,16 @@ def rec_loc_climb_sim(model, df_raw, climb_ids=[106129861, 106460891],
     loc_recs = []
     n_recs = 0
     for climb in top_recs:
-        if df_raw.loc[climb].rating < rating_max:
-            loc = df_raw.loc[climb].sub_location
-            if loc not in (list(visited) + loc_recs):
-                loc_climb_recs[loc] += [climb]
-                if len(loc_climb_recs[loc]) == n_climbs:
-                    loc_recs += [loc]
-                    n_recs += 1
-                    if n_recs == n_areas:
-                        break
+        if df_raw.loc[climb].stars > star_min:
+            if df_raw.loc[climb].rating < rating_max:
+                loc = df_raw.loc[climb].sub_location
+                if loc not in (list(visited) + loc_recs):
+                    loc_climb_recs[loc] += [climb]
+                    if len(loc_climb_recs[loc]) == n_climbs:
+                        loc_recs += [loc]
+                        n_recs += 1
+                        if n_recs == n_areas:
+                            break
     
     if verbose:
         for loc in loc_recs:
@@ -106,6 +179,17 @@ def rec_loc_climb_sim(model, df_raw, climb_ids=[106129861, 106460891],
 
 
 def get_latent_climbs(climb_ids, model):
+    '''Get latent features of climbs
+
+    Args:
+        climb_ids (list of ints): climb ids
+        model (Graphlab model): model to use
+
+    Returns:
+        climb_av (list of floats): Average latent features scores
+                                   of input climbs
+    '''
+
     coefs = model.get('coefficients')
     df_fac_climb = pd.DataFrame(np.array(coefs['Climb']['factors']))
     df_fac_climb.set_index(np.array(coefs['Climb']['Climb']), inplace=True)
@@ -115,9 +199,16 @@ def get_latent_climbs(climb_ids, model):
     return climb_av
 
 def rec_loc_climb_lf(input_lf, climb_type, model, df_raw, df_data,
-                    rating_max=18, star_min=4, n_climbs=10, 
+                    rating_max=18, star_min=3.5, n_climbs=10, 
                      n_areas=3, verbose=False):
+    '''Recommend climbs based on input latent features.  
 
+    Args:
+        input_lf (numpy.array): array of latent feature scores
+        climb_type (str): climb type to filter by ('Sport' or 'Trad')
+        model (Graphlab model): model must be a matrix factorization
+        df_raw (pd dataframe): 
+    '''
 
     scale_ls = 0.05 * input_lf
     coefs = model.get('coefficients')

@@ -126,7 +126,7 @@
                     <p>Find areas similar to your favorite climb or climbs! Just enter the URL or Climb ID from <a target="_blank" href="http://mountainproject.com">Mountain Project</a>.  Seperate multiple by commas. </p>
                     <p>
                     <form action="{{ url_for('climb_search') }}" method=post class=climb-search>
-                        <input placeholder="Climb URL or ID" class="textubuntu" name=climb type="text">
+                        <input placeholder="Climb URL or ID (ex: 105880759)" class="textubuntu" name=climb type="text">
                         <button class="buttonubuntu">Data!</button>
                     </form>
                     <br>
@@ -152,12 +152,24 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>Rockammend by Climb Features</h2>
                 <p>Answer the following 6 questions in order with +1 or -1:</p>
-                <p align='left'>Do you prefer adventure trad (+1), or technical single pitch (-1)<br>Do you prefer climbing in the Rockies (+1) or not (-1)<br>Do you prefer that the moves are cool (+1), or that the route looks cool (-1)<br>Do you prefer to be out west (+1), or back east (-1)<br>Do you only climb Sport (+1) or is Trad okay (-1)<br>And what is your max climbing difficulty (YDS like "5.10a")</p>
-                <p>
                 <form action="{{ url_for('lf_search') }}" method=post class=lf-search>
-                    <input placeholder='Features (ex. "1, 1, -1, -1, 1, 5.10c")' class="textubuntu" name=lfs type="text">
+                    <p>Do you prefer full day, multi-pitch trad (1), or technical single pitch (2)<br>
+                        <input type="radio" name="radiog_lite1" id="radio11" value='mp' class="css-checkbox"><label for="radio11" class="css-label radGroup1"> Multi-Pitch    </label>
+                        <input type="radio" name="radiog_lite1" id="radio12" value='sp' class="css-checkbox" checked="checked"><label for="radio12" class="css-label radGroup1"> Single Pitch </label>
+                    </p>
+                    <p>Do you prefer climbs typical of the Rockies (1) or not (2)<BR><input type="radio" name="radiog_lite2" id="radio21" value='rk' class="css-checkbox"><label for="radio21" class="css-label radGroup2"> Rockies </label><input type="radio" name="radiog_lite2" id="radio22" class="css-checkbox" checked="checked"><label for="radio22" class="css-label radGroup2"> No Rockies </label>
+                    </p>
+                    <p>Do you prefer that the moves are cool (1), or that the route looks cool (2)<br><input type="radio" name="radiog_lite3" id="radio31" value='cm' class="css-checkbox" checked="checked"><label for="radio31" class="css-label radGroup3"> Cool Moves </label><input type="radio" name="radiog_lite3" id="radio32" class="css-checkbox"><label for="radio32" class="css-label radGroup3"> Cool Looking Route </label>
+                    </p>
+                    <p>Do you prefer to be out west (1), or back east (2)<BR><input type="radio" name="radiog_lite4" id="radio41" value='ow' class="css-checkbox"><label for="radio41" class="css-label radGroup4"> West </label><input type="radio" name="radiog_lite4" id="radio42" class="css-checkbox" checked="checked"><label for="radio42" class="css-label radGroup4"> East </label>
+                    </p>
+                    <p>Do you only climb Sport (1) or is Trad okay (2)<br><input type="radio" name="radiog_lite5" id="radio51" value='sp' class="css-checkbox"><label for="radio51" class="css-label radGroup5"> Sport </label><input type="radio" name="radiog_lite5" id="radio52" class="css-checkbox" checked="checked"><label for="radio52" class="css-label radGroup5"> Either </label>
+                    </p>
+
+                    <input placeholder='Max Grade (YDS) (ex. "5.10a")' class="textubuntu" name=lfs type="text">
                     <button class="buttonubuntu">Data!</button>
                 </form>
+                
                 <br>
                 <br>
                 <br>
